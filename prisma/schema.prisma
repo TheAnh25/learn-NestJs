@@ -12,10 +12,30 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
-  email String
+  email String @unique
   hashedPassword String
-  firstName String
-  lastName String
+  firstName String? //can be null (optional value)
+  lastName String? //can be null
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  //relationship
+  notes Note[]
+
+  @@map("users") //users id "table's name"
+}
+
+//1 user có thể có nhiều notes
+model Note {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  url String 
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  //relationships
+
+  userId Int //foreign key
+  user User @relation(fields: [userId], references: [id])
+  @@map("notes") //users id "table's name"
 }
